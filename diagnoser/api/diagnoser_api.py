@@ -22,27 +22,53 @@ class DiagnoserAPI(object):
             symptom.diagnoses = {d.name: d for d in diagnoses}
             self.symptoms[symptom.name] = symptom
 
-    def get_symptoms(self):
-        return self.symptoms.values()
+    def get_symptoms(self, serialize=False):
+        symptoms = self.symptoms.values()
+        if serialize:
+            return {'symptoms': [s.serialize() for s in symptoms]}
 
-    def get_symptom(self, symptom):
+        return symptoms
+
+    def get_symptom(self, symptom, serialize=False):
         if symptom not in self.symptoms:
             raise ValueError('Can not find any diagnoses for symptom: {symptom}'.format(sym=symptom))
 
-        return self.symptoms[symptom]
+        symptom_obj = self.symptoms[symptom]
+        if serialize:
+            return {'symptom': symptom_obj.serialize()}
 
-    def get_all_diagnoses_for_symptom(self, symptom):
-        symptom_obj = self.get_symptom(symptom)
-        return symptom_obj.diagnoses.values()
+        return symptom_obj
 
-    def get_diagnosis_for_symptom(self, symptom, diagnosis):
+    def get_all_diagnoses_for_symptom(self, symptom, serialize=False):
         symptom_obj = self.get_symptom(symptom)
-        return symptom_obj.get_diagnosis(diagnosis)
 
-    def get_top_diagnosis_for_symptom(self, symptom):
-        symptom_obj = self.get_symptom(symptom)
-        return symptom_obj.top_diagnosis
+        diagnoses = symptom_obj.dianoses.values()
+        if serialize:
+            return {'diagnoses': [d.serialize() for d in diagnoses]}
 
-    def handle_diagnosis_response(self, symptom, diagnosis, response):
+        return diagnoses
+
+    def get_diagnosis_for_symptom(self, symptom, diagnosis, serialize=False):
         symptom_obj = self.get_symptom(symptom)
-        return symptom_obj.handle_diagnosis(diagnosis, response=response)
+        diagnosis_obj = symptom_obj.get_diagnosis(diagnosis)
+        if serialize:
+            return {'diagnosis': diagnosis_obj.serialize()}
+
+        return diagnosis_obj
+
+    def get_top_diagnosis_for_symptom(self, symptom, serialize=False):
+        symptom_obj = self.get_symptom(symptom)
+
+        top_diagnosis = symptom_obj.top_diagnosis
+        if serialize:
+            return {'diagnosis': top_diagnosis.serialize()}
+
+        return top_diagnosis
+
+    def handle_diagnosis_response(self, symptom, diagnosis, response, serialize=False):
+        symptom_obj = self.get_symptom(symptom)
+        handle_response = symptom_obj.handle_diagnosis(diagnosis, response=response)
+        if serialize:
+            return {'diagnosis': handle_response.serialize()}
+
+        return handle_response

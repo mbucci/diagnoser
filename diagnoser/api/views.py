@@ -20,8 +20,7 @@ def get_all_symptoms():
 
     :return:
     """
-    symptoms = current_app.diagnoser_api.get_symptoms()
-    return jsonify({'symptoms': [s.serialize() for s in symptoms]})
+    return jsonify(current_app.diagnoser_api.get_symptoms(serialize=True))
 
 
 @API.route('/symptoms/<symptom>', methods=['GET'])
@@ -32,7 +31,7 @@ def get_symptom(symptom):
     :param symptom:
     :return:
     """
-    return jsonify({'symptom': current_app.diagnoser_api.get_symptom(symptom).serialize()})
+    return jsonify(current_app.diagnoser_api.get_symptom(symptom, serialize=True))
 
 
 @API.route('/symptoms/<symptom>/diagnoses', methods=['GET'])
@@ -43,8 +42,7 @@ def get_all_symptom_diagnosis(symptom):
     :param symptom:
     :return:
     """
-    diagnoses = current_app.diagnoser_api.get_all_diagnoses_for_symptom(symptom)
-    return jsonify({'diagnoses': [d.serialize() for d in diagnoses]})
+    return jsonify(current_app.diagnoser_api.get_all_diagnoses_for_symptom(symptom, serialize=True))
 
 
 @API.route('/symptoms/<symptom>/diagnoses/top', methods=['GET'])
@@ -55,7 +53,7 @@ def get_top_diagnosis(symptom):
     :param symptom:
     :return:
     """
-    return jsonify({'diagnosis': current_app.diagnoser_api.get_top_diagnosis_for_symptom(symptom).serialize()})
+    return jsonify(current_app.diagnoser_api.get_top_diagnosis_for_symptom(symptom, serialize=True))
 
 
 @API.route('/symptoms/<symptom>/diagnoses/<diagnosis>', methods=['GET'])
@@ -82,6 +80,7 @@ def handle_symptom_diagnosis_response(symptom, diagnosis):
     """
 
     data = json.loads(request.data)
-    response = current_app.diagnoser_api.handle_diagnosis_response(symptom, diagnosis, data.get('response'))
-    return jsonify(response.serialize())
+    response = data.get('response')
+
+    return jsonify(current_app.diagnoser_api.handle_diagnosis_response(symptom, diagnosis, response, serialize=True))
 

@@ -7,8 +7,8 @@ import os
 import logging
 import uuid
 
-MAJOR = 0
-MINOR = 1
+MAJOR = 1
+MINOR = 0
 PATCH = 0
 
 

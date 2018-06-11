@@ -41,7 +41,7 @@ class Symptom(object):
 
     @property
     def top_diagnosis(self):
-        if self._top_diagnosis:
+        if self._top_diagnosis and self._top_diagnosis.diagnosis_rate > 0:
             return self._top_diagnosis
 
         r = random.randint(0, len(self.diagnoses) - 1)
@@ -67,7 +67,7 @@ class Symptom(object):
         diagnosis_obj = self.get_diagnosis(diagnosis)
         if response:
             diagnosis_obj.diagnosed += 1
-            if diagnosis_obj.diagnosis_rate > self.top_diagnosis.rate:
+            if diagnosis_obj.diagnosis_rate > self.top_diagnosis.diagnosis_rate:
                 self._top_diagnosis = diagnosis_obj
 
         return diagnosis_obj
