@@ -1,0 +1,16 @@
+*.egg-info
+*.DS_Store
+node_modules
+diagnoser/static/js/*
+diagnoser/static/css/*
+.coverage
+nosetests.xml
+js-test-results.xml
+*.log
+*.pyc
+local_settings.py
+secrets.py
+.noseids
+.idea
+.eggs
+test_summary.txt
