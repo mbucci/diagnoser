@@ -2,7 +2,6 @@
 
 import $ from 'jquery';
 import React, { Component } from 'react';
-import toastr from 'toastr';
 
 import Utils from '../utils';
 import { SymptomForm, DiagnosisForm } from './forms';
@@ -35,13 +34,12 @@ class SymptomChecker extends Component {
             url: Utils.buildUrl(['diagnoses', symptom]),
             type: 'GET',
             success: (data) => {
-                toastr.remove();
                 this.setState({
                     diagnoses: data._result
                 });
             },
             error: (event) => {
-                toastr.error("Blah Blah Blah")
+                console.log("Blah Blah Blah")
             }
         })
     }

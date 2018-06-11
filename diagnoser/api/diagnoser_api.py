@@ -5,7 +5,7 @@ from __future__ import print_function
 
 import csv
 
-from diagnoser.models.symptom import Symptom
+from diagnoser.models.symptom import Symptom, Diagnosis
 
 
 class DiagnoserAPI(object):
@@ -17,22 +17,32 @@ class DiagnoserAPI(object):
     def load_symptoms(self, symptoms_file):
         csv_reader = csv.reader(symptoms_file)
         for row in csv_reader:
-            symptom = Symptom(name=row[0], diagnoses=[d.strip() for d in row[1:]])
+            symptom = Symptom(name=row[0])
+            diagnoses = [Diagnosis(name=d) for d in row[1:]]
+            symptom.diagnoses = {d.name: d for d in diagnoses}
             self.symptoms[symptom.name] = symptom
+
+    def get_symptoms(self):
+        return self.symptoms.values()
 
     def get_symptom(self, symptom):
         if symptom not in self.symptoms:
-            raise ValueError('Can not find any diagnoses for symptom: {symptom}'.format(symptom=symptom))
+            raise ValueError('Can not find any diagnoses for symptom: {symptom}'.format(sym=symptom))
 
         return self.symptoms[symptom]
 
-    def get_top_diagnosis_for_symptom(self, symptom):
-        symptom_obj = self.get_symptom(symptom)
-        return {'diagnosis': symptom_obj.top_diagnosis()}
-
     def get_all_diagnoses_for_symptom(self, symptom):
         symptom_obj = self.get_symptom(symptom)
-        return {'diagnosis': symptom_obj.diagnoses}
+        return symptom_obj.diagnoses.values()
 
-    def get_all_symptoms(self):
-        return {'symptoms': self.symptoms.keys()}
+    def get_diagnosis_for_symptom(self, symptom, diagnosis):
+        symptom_obj = self.get_symptom(symptom)
+        return symptom_obj.get_diagnosis(diagnosis)
+
+    def get_top_diagnosis_for_symptom(self, symptom):
+        symptom_obj = self.get_symptom(symptom)
+        return symptom_obj.top_diagnosis
+
+    def handle_diagnosis_response(self, symptom, diagnosis, response):
+        symptom_obj = self.get_symptom(symptom)
+        return symptom_obj.handle_diagnosis(diagnosis, response=response)
