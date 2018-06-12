@@ -31,7 +31,7 @@ class DiagnoserAPI(object):
 
     def get_symptom(self, symptom, serialize=False):
         if symptom not in self.symptoms:
-            raise ValueError('Can not find any diagnoses for symptom: {symptom}'.format(sym=symptom))
+            raise ValueError('Can not find any diagnoses for symptom: {sym}'.format(sym=symptom))
 
         symptom_obj = self.symptoms[symptom]
         if serialize:
@@ -42,7 +42,7 @@ class DiagnoserAPI(object):
     def get_all_diagnoses_for_symptom(self, symptom, serialize=False):
         symptom_obj = self.get_symptom(symptom)
 
-        diagnoses = symptom_obj.dianoses.values()
+        diagnoses = symptom_obj.diagnoses.values()
         if serialize:
             return {'diagnoses': [d.serialize() for d in diagnoses]}
 

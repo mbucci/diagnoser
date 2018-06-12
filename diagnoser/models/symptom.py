@@ -21,7 +21,7 @@ class Diagnosis(object):
         if not self.seen:
             return 0
 
-        return self.diagnosed // self.seen
+        return float(self.diagnosed) / float(self.seen)
 
     def serialize(self):
         return {
@@ -57,7 +57,7 @@ class Symptom(object):
 
     def get_diagnosis(self, diagnosis):
         if diagnosis not in self.diagnoses:
-            raise ValueError('Symptom: {sym} does not contain diagnosis: {diag}'.format(diag=diagnosis))
+            raise ValueError('Symptom: {sym} does not contain diagnosis: {diag}'.format(sym=self.name, diag=diagnosis))
 
         diagnosis_obj = self.diagnoses[diagnosis]
         diagnosis_obj.seen += 1

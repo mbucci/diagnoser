@@ -6,11 +6,11 @@ from __future__ import print_function
 import json
 
 from flask import url_for
-from mock import patch, Mock, MagicMock
-from diagnoser.core.tests.utils import ViewsTestCase
+from mock import patch
+from diagnoser.core.tests.utils import BaseTestCase
 
 
-class APIViewsTestCase(ViewsTestCase):
+class APIViewsTestCase(BaseTestCase):
     def setUp(self):
         super(APIViewsTestCase, self).setUp()
         self.pma_xp_patch = patch('kapy.pma_xp.create_api', return_value=MagicMock())

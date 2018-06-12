@@ -42,3 +42,5 @@ class Test(Common):
     LOGGING_LEVEL = logging.CRITICAL
     LOGGING_STDOUT = False
 
+    SYMPTOMS_FILE = "test_symptoms.csv"
+
